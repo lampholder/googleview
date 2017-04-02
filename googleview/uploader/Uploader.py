@@ -20,9 +20,22 @@ class Uploader(object):
         self._drive = GoogleDrive(gauth)
 
     @classmethod
-    def from_dict(cls, config_dict):
-        """Instantiate the uploader with config supplied in a dict."""
-        pass
+    def from_client_id_and_secret(cls, client_id, secret):
+        """Instantiate the uploader with config supplied."""
+        settings = {'save_credentials': True,
+                    'save_credentials_backend': 'file',
+                    'client_config': {'auth_uri': 'https://accounts.google.com/o/oauth2/auth',
+                                      'redirect_uri': 'urn:ietf:wg:oauth:2.0:oob',
+                                      'client_id': client_id,
+                                      'client_secret': secret,
+                                      'token_uri': 'https://accounts.google.com/o/oauth2/token',
+                                      'revoke_uri': None},
+                    'get_refresh_token': True,
+                    'save_credentials_file': 'credentials.json',
+                    'client_config_backend': 'settings',
+                    'oauth_scope': ['https://www.googleapis.com/auth/drive.file']}
+
+        return cls(settings)
 
     @classmethod
     def from_file(cls, config_filename):
